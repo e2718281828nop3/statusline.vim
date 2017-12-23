@@ -71,16 +71,16 @@ function! statusline#reset_color()
 endfunction
 
 function! statusline#file()
-    setlocal statusline+=%#Important#
-    setlocal statusline+=%r%h%w
-    setlocal statusline+=%#File#
-    setlocal statusline+=\ 
-    setlocal statusline+=%<%f%m
-    setlocal statusline+=\ 
+    set statusline+=%#Important#
+    set statusline+=%r%h%w
+    set statusline+=%#File#
+    set statusline+=\ 
+    set statusline+=%<%f%m
+    set statusline+=\ 
 endfunction
 
 function! statusline#buffer()
-    setlocal statusline+=b:%n\ 
+    set statusline+=b:%n\ 
 endfunction
 
 function! statusline#ALE_status(key, ...)
@@ -90,26 +90,26 @@ function! statusline#ALE_status(key, ...)
 endfunction
 
 function! statusline#ALE()
-    setlocal statusline+=%#ALEError#
-    setlocal statusline+=%{statusline#ALE_status('error','E')}
-    setlocal statusline+=%#ALEStyleError#
-    setlocal statusline+=%{statusline#ALE_status('style_error','Es')}
-    setlocal statusline+=%#ALEWarning#
-    setlocal statusline+=%{statusline#ALE_status('warning','W')}
-    setlocal statusline+=%#ALEStyleWarning#
-    setlocal statusline+=%{statusline#ALE_status('style_warning','Ws')}
-    setlocal statusline+=%#StlBase#
+    set statusline+=%#ALEError#
+    set statusline+=%{statusline#ALE_status('error','E')}
+    set statusline+=%#ALEStyleError#
+    set statusline+=%{statusline#ALE_status('style_error','Es')}
+    set statusline+=%#ALEWarning#
+    set statusline+=%{statusline#ALE_status('warning','W')}
+    set statusline+=%#ALEStyleWarning#
+    set statusline+=%{statusline#ALE_status('style_warning','Ws')}
+    set statusline+=%#StlBase#
 endfunction
 
 function! statusline#file_info()
   if &enc == &fenc
-    setlocal statusline+=%{&fenc}
+    set statusline+=%{&fenc}
   else
-    setlocal statusline+=%#Important#
-    setlocal statusline+=\ enc\=%{&enc}\ fenc\=%{&fenc}\ 
-    setlocal statusline+=%#StlBase#
+    set statusline+=%#Important#
+    set statusline+=\ enc\=%{&enc}\ fenc\=%{&fenc}\ 
+    set statusline+=%#StlBase#
   endif
-  setlocal statusline+=\ %{&ff}\ 
+  set statusline+=\ %{&ff}\ 
 endfunction
 
 function! statusline#set(...)
@@ -126,7 +126,7 @@ function! statusline#set(...)
     call statusline#ALE()
 
     "align right
-    setlocal statusline+=%=
+    set statusline+=%=
     call statusline#file_info()
 endfunction
 
