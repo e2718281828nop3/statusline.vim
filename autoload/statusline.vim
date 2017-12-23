@@ -8,40 +8,42 @@ let g:loaded_statusline = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! GitRepoName()
+function! statusline#git_repo_name()
 "    return system("basename `git rev-parse --show-toplevel 2> /dev/null` 2> /dev/null | tr -d '\n'")
     return ''
 endfunction
 
-function! GitBranchName()
+function! statusline#git_branch_name()
     return system("git rev-parse --abbrev-ref HEAD 2> /dev/null | tr -d '\n'")
 endfunction
 
-function! GitRepo()
-    return strlen(GitRepoName()) > 0 ? GitRepoName() : ''
+function! statusline#git_repo()
+    return strlen(statusline#git_repo_name()) > 0 ? statusline#git_repo_name() : ''
 endfunction
 
-function! GitBranch()
-    return strlen(GitRepoName()) > 0 ? GitBranchName().' ' : ''
+function! statusline#git_branch()
+    return strlen(statusline#git_repo_name()) > 0 ? statusline#git_branch_name().' ' : ''
 endfunction
 
-function! SetSTL_Init()
-    setlocal statusline=
-    setlocal statusline+=%#StlBase#
+function! statusline#init()
+    set statusline=
+    set statusline+=%#StlBase#
 endfunction
 
-function! SetSTL_ModeColor(...)
-    let mode = get(a:, 1, mode())
+function! statusline#mode_color(...)
+    let mode = mode()
+set stl+=SetSTL_ModeColor:
     if mode == 'n'
-        setlocal statusline+=%#StlBase#
+        set statusline+=%#StlBase#
     elseif mode == 'i'
-        setlocal statusline+=%#STL_Insert#
+        set statusline+=%#STL_Insert#
     elseif mode == 'v'
-        setlocal statusline+=%#STL_Visual#
+        set statusline+=%#STL_Visual#
     endif
 endfunction
 
-function! SetSTL_Mode(mode)
+function! statusline#mode()
+set stl+=SetSTL_Mode:
     let b:strmap = {
                 \ 'n': '  normal ',
                 \ 'i': '  insert ',
@@ -49,26 +51,27 @@ function! SetSTL_Mode(mode)
                 \ 'V': '  visual ',
                 \'^V': '  visual ',
                 \}
-    setlocal statusline+=%{get(b:strmap,mode(),'')}
+    set statusline+=%{get(b:strmap,mode(),'')}
 endfunction
 
-function! SetSTL_Git()
-    setlocal statusline+=%#Git#
-    setlocal statusline+=%{GitRepo()}
-    if GitBranchName() == 'master'
-        setlocal statusline+=%#GitMasterBranch#
+function! statusline#git()
+set stl+=SetSTL_Git:
+    set statusline+=%#Git#
+    set statusline+=%{statusline#git_repo()}
+    if statusline#GitBranchName() == 'master'
+        set statusline+=%#GitMasterBranch#
     else
-        setlocal statusline+=%#GitBranch#
+        set statusline+=%#GitBranch#
     endif
-    setlocal statusline+=%{GitBranch()}
-    setlocal statusline+=%#StlBase#
+    set statusline+=%{statusline#git_branch()}
+    set statusline+=%#StlBase#
 endfunction
 
-function! ResetColor()
-    setlocal statusline+=%#StlBase#
+function! statusline#reset_color()
+    set statusline+=%#StlBase#
 endfunction
 
-function! SetSTL_File()
+function! statusline#file()
     setlocal statusline+=%#Important#
     setlocal statusline+=%r%h%w
     setlocal statusline+=%#File#
@@ -77,29 +80,29 @@ function! SetSTL_File()
     setlocal statusline+=\ 
 endfunction
 
-function! SetSTL_Buffer()
+function! statusline#buffer()
     setlocal statusline+=b:%n\ 
 endfunction
 
-function! ALE_Status(key, ...)
+function! statusline#ALE_status(key, ...)
     let word = get(a:, 1, '')
     let n = ale#statusline#Count(bufnr(''))[a:key]
     return n == 0 ? '' : ' ' . word . n . ' '
 endfunction
 
-function! SetSTL_ALE()
+function! statusline#ALE()
     setlocal statusline+=%#ALEError#
-    setlocal statusline+=%{ALE_Status('error','E')}
+    setlocal statusline+=%{statusline#ALE_status('error','E')}
     setlocal statusline+=%#ALEStyleError#
-    setlocal statusline+=%{ALE_Status('style_error','Es')}
+    setlocal statusline+=%{statusline#ALE_status('style_error','Es')}
     setlocal statusline+=%#ALEWarning#
-    setlocal statusline+=%{ALE_Status('warning','W')}
+    setlocal statusline+=%{statusline#ALE_status('warning','W')}
     setlocal statusline+=%#ALEStyleWarning#
-    setlocal statusline+=%{ALE_Status('style_warning','Ws')}
+    setlocal statusline+=%{statusline#ALE_status('style_warning','Ws')}
     setlocal statusline+=%#StlBase#
 endfunction
 
-function! SetSTL_FileInfo()
+function! statusline#file_info()
   if &enc == &fenc
     setlocal statusline+=%{&fenc}
   else
@@ -110,22 +113,22 @@ function! SetSTL_FileInfo()
   setlocal statusline+=\ %{&ff}\ 
 endfunction
 
-function! SetSTL(...)
+function! statusline#set(...)
     let mode = get(a:, 1, mode())
 
     "align left
-    call SetSTL_Init()
-    call SetSTL_ModeColor(mode)
-    call SetSTL_Mode(mode)
-    call ResetColor()
-    call SetSTL_Git()
-    call SetSTL_File()
-    call SetSTL_Buffer()
-    call SetSTL_ALE()
+    call statusline#init()
+    call statusline#mode_color()
+    call statusline#mode()
+    call statusline#reset_color()
+    call statusline#git()
+    call statusline#file()
+    call statusline#buffer()
+    call statusline#ALE()
 
     "align right
     setlocal statusline+=%=
-    call SetSTL_FileInfo()
+    call statusline#file_info()
 endfunction
 
 
