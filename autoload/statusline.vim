@@ -44,14 +44,14 @@ function! statusline#mode_color(...)
 endfunction
 
 function! statusline#mode()
-    let b:strmap = {
+    let l:strmap = {
                 \ 'n': '  normal ',
                 \ 'i': '  insert ',
                 \ 'v': '  visual ',
                 \ 'V': '  visual ',
                 \'^V': '  visual ',
                 \}
-    set statusline+=%{get(b:strmap,mode(),'')}
+    set statusline+=%{get(l:strmap,mode(),'')}
 endfunction
 
 function! statusline#git()
