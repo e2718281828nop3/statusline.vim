@@ -32,7 +32,7 @@ function! statusline#init()
 endfunction
 
 function! statusline#mode_color(...)
-    let mode = mode()
+    let mode = get(a:, 1, mode())
 
     if mode == 'n'
         set statusline+=%#StlBase#
@@ -117,7 +117,7 @@ function! statusline#set(...)
 
     "align left
     call statusline#init()
-    call statusline#mode_color()
+    call statusline#mode_color(mode)
     call statusline#mode()
     call statusline#reset_color()
     call statusline#git()
