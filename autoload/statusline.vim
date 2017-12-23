@@ -3,6 +3,7 @@ scriptencoding utf-8
 if !exists('g:loaded_statusline')
     finish
 endif
+
 let g:loaded_statusline = 1
 
 let s:save_cpo = &cpo
@@ -32,7 +33,7 @@ endfunction
 
 function! statusline#mode_color(...)
     let mode = mode()
-set stl+=SetSTL_ModeColor:
+
     if mode == 'n'
         set statusline+=%#StlBase#
     elseif mode == 'i'
@@ -43,7 +44,6 @@ set stl+=SetSTL_ModeColor:
 endfunction
 
 function! statusline#mode()
-set stl+=SetSTL_Mode:
     let b:strmap = {
                 \ 'n': '  normal ',
                 \ 'i': '  insert ',
@@ -55,10 +55,9 @@ set stl+=SetSTL_Mode:
 endfunction
 
 function! statusline#git()
-set stl+=SetSTL_Git:
     set statusline+=%#Git#
     set statusline+=%{statusline#git_repo()}
-    if statusline#GitBranchName() == 'master'
+    if statusline#git_branch_name() == 'master'
         set statusline+=%#GitMasterBranch#
     else
         set statusline+=%#GitBranch#
