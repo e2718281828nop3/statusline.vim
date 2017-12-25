@@ -23,7 +23,7 @@ function! statusline#git_repo()
 endfunction
 
 function! statusline#git_branch()
-    return strlen(statusline#git_branch_name()) > 0 ? ' '.statusline#git_branch_name().' ' : ''
+    return strlen(statusline#git_branch_name()) > 0 ? '  '.statusline#git_branch_name().' ' : ''
 "    return strlen(statusline#git_repo_name()) > 0 ? statusline#git_branch_name().' ' : ''
 endfunction
 
