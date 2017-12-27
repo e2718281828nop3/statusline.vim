@@ -87,7 +87,8 @@ endfunction
 function! statusline#ALE_status(key, ...)
     let word = get(a:, 1, '')
     let n = ale#statusline#Count(bufnr(''))[a:key]
-    return n == 0 ? '' : ' ' . word . n . ' '
+    let prefix = a:key ==# 'error' ? ' ' : '  '
+    return n == 0 ? '' : prefix . word . n . ' '
 endfunction
 
 function! statusline#ALE()
