@@ -15,7 +15,8 @@ function! statusline#git_repo_name()
 endfunction
 
 function! statusline#git_branch_name()
-    return system("git rev-parse --abbrev-ref HEAD 2> /dev/null | tr -d '\n'")
+"    return system("git rev-parse --abbrev-ref HEAD 2> /dev/null | tr -d '\n'")
+    return ''
 endfunction
 
 function! statusline#git_repo()
@@ -64,7 +65,6 @@ function! statusline#git()
         set statusline+=%#GitBranch#
     endif
     set statusline+=%{statusline#git_branch()}
-    set statusline+=%#StlBase#
 endfunction
 
 function! statusline#reset_color()
@@ -87,7 +87,6 @@ endfunction
 function! statusline#ALE_status(key, ...)
     let word = get(a:, 1, '')
     let n = ale#statusline#Count(bufnr(''))[a:key]
-    "let prefix = a:key ==# 'error' ? ' ' : '  '
     return n == 0 ? '' : ' '.word.n.' '
 endfunction
 
@@ -123,6 +122,7 @@ function! statusline#set(...)
     call statusline#mode()
     call statusline#reset_color()
     call statusline#git()
+    call statusline#reset_color()
     call statusline#file()
     call statusline#buffer()
     call statusline#ALE()
