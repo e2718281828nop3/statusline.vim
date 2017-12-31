@@ -29,8 +29,7 @@ function! statusline#git_branch()
 endfunction
 
 function! statusline#init()
-    set statusline=
-    set statusline+=%#StlBase#
+    set  statusline& statusline+=%#StlBase#
 endfunction
 
 function! statusline#mode_color(...)
