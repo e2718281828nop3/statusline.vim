@@ -10,13 +10,11 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! statusline#git_repo_name()
-"    return system("basename `git rev-parse --show-toplevel 2> /dev/null` 2> /dev/null | tr -d '\n'")
-    return ''
+    silent return system("basename `git rev-parse --show-toplevel 2> /dev/null` 2> /dev/null | tr -d '\n'")
 endfunction
 
 function! statusline#git_branch_name()
-"    return system("git rev-parse --abbrev-ref HEAD 2> /dev/null | tr -d '\n'")
-    return ''
+    silent return system("git rev-parse --abbrev-ref HEAD 2> /dev/null | tr -d '\n'")
 endfunction
 
 function! statusline#git_repo()
