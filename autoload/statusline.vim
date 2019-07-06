@@ -23,34 +23,40 @@ endfunction
 
 function! statusline#git_branch()
     return strlen(statusline#git_branch_name()) > 0 ? '  '.statusline#git_branch_name().' ' : ''
-"    return strlen(statusline#git_repo_name()) > 0 ? statusline#git_branch_name().' ' : ''
 endfunction
 
 function! statusline#init()
     set  statusline& statusline+=%#StlBase#
 endfunction
 
-function! statusline#mode_color(...)
-    let mode = get(a:, 1, mode())
+let g:statusline#strmap = {
+            \ 'n': '  normal ',
+            \ 'i': '  insert ',
+            \ 'v': '  visual ',
+            \ 'V': '  V_Line ',
+            \"": '  VBlock ',
+            \}
 
-    if mode == 'n'
-        set statusline+=%#StlBase#
-    elseif mode == 'i'
-        set statusline+=%#STL_Insert#
-    elseif mode == 'v'
-        set statusline+=%#STL_Visual#
-    endif
+function! statusline#set_mode(...)
+    hi STL_Mode ctermfg=238 ctermbg=230
+    set stl+=%#STL_Mode#
+    set stl+=%{get(g:statusline#strmap,mode(),'')}
+    set stl+=%{statusline#hi_mode(mode())}
 endfunction
 
-function! statusline#mode()
-    let g:statusline#strmap = {
-                \ 'n': '  normal ',
-                \ 'i': '  insert ',
-                \ 'v': '  visual ',
-                \ 'V': '  visual ',
-                \'^V': '  visual ',
-                \}
-    set statusline+=%{get(g:statusline#strmap,mode(),'')}
+function! statusline#hi_mode(mode)
+    if a:mode ==# 'n'
+        hi STL_Mode ctermfg=238 ctermbg=230
+    elseif a:mode ==# 'i'
+        hi STL_Mode ctermfg=white ctermbg=33
+    elseif a:mode ==# 'v'
+        hi STL_Mode ctermfg=white ctermbg=125
+    elseif a:mode ==# 'V'
+        hi STL_Mode ctermfg=white ctermbg=246
+    elseif a:mode ==# ''
+        hi STL_Mode ctermfg=white ctermbg=215
+    endif
+    return ''
 endfunction
 
 function! statusline#git()
@@ -111,12 +117,9 @@ function! statusline#file_info()
 endfunction
 
 function! statusline#set(...)
-    let mode = get(a:, 1, mode())
-
     "align left
     call statusline#init()
-    call statusline#mode_color(mode)
-    call statusline#mode()
+    call statusline#set_mode(mode())
     call statusline#reset_color()
     call statusline#git()
     call statusline#reset_color()
@@ -128,8 +131,6 @@ function! statusline#set(...)
     set statusline+=%=
     call statusline#file_info()
 endfunction
-
-
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
