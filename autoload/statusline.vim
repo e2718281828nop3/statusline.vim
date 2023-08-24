@@ -21,6 +21,10 @@ let g:statusline#strmap = {
             \"": '  VBlock ',
             \}
 
+if !exists('g:statusline#fullpath')
+    let g:statusline#fullpath = 1
+endif
+
 function! statusline#set_mode(...)
     hi STL_Mode ctermfg=238 ctermbg=230
     set stl+=%#STL_Mode#%{get(g:statusline#strmap,mode(),'')}%{statusline#hi_mode(mode())}
@@ -67,7 +71,11 @@ function! statusline#reset_color()
 endfunction
 
 function! statusline#set_filename()
-    set statusline+=%#Important#%r%h%w%#File#\ %<%f%m\ 
+    if g:statusline#fullpath == 1
+        set statusline+=%#Important#%r%h%w%#File#\ %<%F%m\ 
+    else
+        set statusline+=%#Important#%r%h%w%#File#\ %<%f%m\ 
+    endif
 "    set statusline+=%#Important#
 "    set statusline+=%r%h%w
 "    set statusline+=%#File#
